@@ -15,8 +15,11 @@ const firebaseConfig = {
 
 export const isFirebaseConfigured = Boolean(
   firebaseConfig.apiKey &&
+  !firebaseConfig.apiKey.includes('xxxxxxxx') &&
   firebaseConfig.databaseURL &&
-  firebaseConfig.projectId
+  !firebaseConfig.databaseURL.includes('your-project-id') &&
+  firebaseConfig.projectId &&
+  firebaseConfig.projectId !== 'your-project-id'
 );
 
 let app: FirebaseApp | null = null;

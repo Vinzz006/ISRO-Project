@@ -1,31 +1,29 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
-import { router } from 'expo-router';
+import { Redirect } from 'expo-router';
 import { useAuth } from '../context/AuthContext';
 import { Colors } from '../constants/colors';
 
 export default function Index() {
   const { user, isLoading } = useAuth();
 
-  useEffect(() => {
-    if (!isLoading) {
-      if (user) {
-        router.replace('/(tabs)/dashboard');
-      } else {
-        router.replace('/login');
-      }
-    }
-  }, [user, isLoading]);
-
-  return (
-    <View style={styles.container}>
-      <View style={styles.radarRing}>
-        <ActivityIndicator size="large" color={Colors.cyan} />
+  if (isLoading) {
+    return (
+      <View style={styles.container}>
+        <View style={styles.radarRing}>
+          <ActivityIndicator size="large" color={Colors.cyan} />
+        </View>
+        <Text style={styles.title}>MISSION CONTROL INITIALIZING</Text>
+        <Text style={styles.subtitle}>VERIFYING PROPULSION TELEMETRY LINK...</Text>
       </View>
-      <Text style={styles.title}>MISSION CONTROL INITIALIZING</Text>
-      <Text style={styles.subtitle}>VERIFYING PROPULSION TELEMETRY LINK...</Text>
-    </View>
-  );
+    );
+  }
+
+  if (user) {
+    return <Redirect href="/(tabs)/dashboard" />;
+  }
+
+  return <Redirect href="/login" />;
 }
 
 const styles = StyleSheet.create({
