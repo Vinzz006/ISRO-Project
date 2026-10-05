@@ -1,0 +1,67 @@
+{
+  "rules": {
+    "devices": {
+      "$deviceId": {
+        // Authenticated flight controllers and dashboard clients can monitor device data
+        ".read": "auth != null",
+
+        "telemetry": {
+          // Telemetry is published by authorized edge controllers or authenticated testing operators
+          ".write": "auth != null",
+          ".validate": "newData.hasChildren(['rpm', 'current', 'vibration', 'timestamp'])",
+          "rpm": {
+            ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 15000"
+          },
+          "current": {
+            ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 25"
+          },
+          "vibration": {
+            ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 10"
+          },
+          "timestamp": {
+            ".validate": "newData.isNumber()"
+          }
+        },
+
+        "status": {
+          // Status updates (heartbeat, motor running, emergency stop)
+          ".write": "auth != null",
+          ".validate": "newData.hasChildren(['online', 'motorRunning', 'emergencyStop', 'lastSeen'])"
+        },
+
+        "health": {
+          ".write": "auth != null"
+        },
+
+        "thresholds": {
+          // Only authenticated operators can calibrate thresholds
+          ".write": "auth != null"
+        },
+
+        "faults": {
+          // Hardware edge controller records safety trips
+          ".write": "auth != null"
+        },
+
+        "control": {
+          // Command interlock (Arm, Start, Stop, Emergency Stop)
+          ".write": "auth != null",
+          ".validate": "newData.hasChildren(['emergencyStop'])"
+        },
+
+        "events": {
+          // Historical audit events log (append-only)
+          ".write": "auth != null",
+          "$eventId": {
+            ".validate": "newData.hasChildren(['type', 'severity', 'message', 'timestamp'])"
+          }
+        },
+
+        "history": {
+          // Historical time-series points
+          ".write": "auth != null"
+        }
+      }
+    }
+  }
+}

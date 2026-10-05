@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "app-temp",
-    "slug": "app-temp",
+    "name": "Launch Vehicle Health Monitor",
+    "slug": "launch-vehicle-health-monitor",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "apptemp",
+    "scheme": "launchvehiclehealth",
     "userInterfaceStyle": "automatic",
     "ios": {
       "icon": "./assets/expo.icon"
